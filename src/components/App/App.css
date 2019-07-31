@@ -1,5 +1,9 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
+}
+
+.app-background {
+  background-color: #000
 }
 
 .App-logo {
@@ -9,7 +13,17 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.crawl-section {
+  background-color: #000;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -23,11 +37,48 @@
   color: #FFE81F;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+
+.crawl-text p {
+  color: #FFE81F;
+  /* Starting position */
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+  /* Apply animation to this element */
+  -moz-animation: crawl-text 15s linear infinite;
+  -webkit-animation: crawl-text 15s linear infinite;
+  animation: crawl-text 15s linear infinite;
+}
+
+/* Move it (define the animation) */
+@-moz-keyframes crawl-text {
+  0% {
+    -moz-transform: translateY(100%);
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    -moz-transform: translateY(-100%);
+  }
+}
+
+@-webkit-keyframes crawl-text {
+  0% {
+    -webkit-transform: translateY(100%);
+  }
+  100% {
+    -webkit-transform: translateY(-100%);
+  }
+}
+
+@keyframes crawl-text {
+  0% {
+    -moz-transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+  }
+
+  100% {
+    -moz-transform: translateY(-100%);
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
   }
 }

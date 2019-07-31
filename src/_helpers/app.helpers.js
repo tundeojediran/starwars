@@ -1,7 +1,8 @@
 import axios from "axios";
-import { appConstants } from "../_constants/app.constants";
+import { appConstants } from "../_constants";
 
 export const appHelpers = {
+    // helper function for get request
     getRequest: function (url, header) {
         let reqHeader = header
             ? header
@@ -9,11 +10,13 @@ export const appHelpers = {
         let config = { headers: reqHeader };
         return axios.get(url, config)
     },
+    // helper function for formatting response
     formatPromiseResponse: function (res, resType) {
         let responseType =
             resType === undefined ? appConstants.SUCCESS_RESPONSE : resType;
         return { status: responseType, response: res };
     },
+    // helper function for formatting error response
     interpretErrorResponse(error) {
         let errorMessage = "";
         if (error.response) {
@@ -34,5 +37,18 @@ export const appHelpers = {
         } else {
             return "Something went wrong!";
         }
+    },
+
+    // helper function for fetching an array of movies titles
+    getMoviesTitles: function (movies) {
+        console.log({movies})
+        
+        let moviesTitles = movies.map((movie) => {
+            return {
+                "label": movie.title,
+                "value": movie.url
+            }
+        })
+        return moviesTitles;
     }
 }

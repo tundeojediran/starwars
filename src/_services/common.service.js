@@ -20,9 +20,10 @@ function fetchAllMovies() {
 }
 
 // fetch the details of a starwars movie
-function fetchMovieDetails() {
-    return appHelpers.getRequest(`${appConstants.BASE_URL}/api/films`)
+function fetchMovieDetails(url) {
+    return appHelpers.getRequest(url)
         .then(res => {
+            console.log({res})
             return appHelpers.formatPromiseResponse(res.data);
         }).catch(
             error => {

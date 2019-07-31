@@ -6,8 +6,10 @@ const activityMiddleware = ({ getState, dispatch }) => (next) => (action) => {
     (action.type !== alertConstants.CLEAR) && 
     (action.type !== alertConstants.ERROR) && 
     (action.type !== alertConstants.SUCCESS)) {
+        console.log("log")
         dispatch(addLog(action.type));
     } else {
+        console.log({action})
         next(action);
     }
 };

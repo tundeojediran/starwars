@@ -1,5 +1,5 @@
 import { commonService } from "../_services/common.service";
-import { appConstants } from "../_constants";
+import { appConstants, alertConstants, commonConstants } from "../_constants";
 import { appHelpers } from "../_helpers";
 
 export const commonActions = {
@@ -11,12 +11,14 @@ function fetchMovies() {
         return commonService.fetchAllMovies()
             .then(
                 response => {
-                    if(response.status === appConstants.SUCCESS_RESPONSE) {
+                    if (response.status === appConstants.SUCCESS_RESPONSE) {
+                        // console.log(response["response"].results)
 
-                        console.log({response})
-                        dispatch(success(response));
+                        let moviesTitles = appHelpers.getMoviesTitles(response.response.results);
+                        console.log({ moviesTitles })
+                        dispatch(success(moviesTitles));
                     }
-                    else if(response.status === appConstants.ERROR_RESPONSE){
+                    else if (response.status === appConstants.ERROR_RESPONSE) {
                         dispatch(failure(response.response));
                     }
                 },
@@ -27,7 +29,10 @@ function fetchMovies() {
             );
     };
 
-    function success(entities) { return { type: commonConstants.GET_ENTITIES, entities } }
+    function success(movieTitles) {
+        // console.log({ movieTitles })
+        return { type: commonConstants.TITLES, movieTitles }
+    }
     function failure(message) { return { type: alertConstants.ERROR, message } }
 
 }

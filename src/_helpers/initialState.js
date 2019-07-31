@@ -1,5 +1,5 @@
 
 export const initialState = {
-    movieTitles: null,
+    moviesTitles: null,
     movieDetails: null
 };
