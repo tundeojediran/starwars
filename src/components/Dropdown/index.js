@@ -20,6 +20,7 @@ const Dropdown = ({ placeholder, data, labelKey, valueKey, clearable,
                 classNamePrefix="select"
                 // isLoading={isLoading}
                 isClearable={clearable}
+                placeholder={placeholder}
                 // isSearchable={isSearchable}
                 options={data}
                 value={selectedValue}

@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 
 // custom components
-import { appConstants } from '../../_constants';
-import { commonActions } from '../../_actions';
+// import { appConstants, commonConstants } from '../../_constants';
+// import { appActions, fetchCharacters } from '../../_actions';
 import { appHelpers } from '../../_helpers';
-import MovieDropDown from '../Dropdown'
+import DropDown from '../Dropdown'
+import CharactersTable from '../Table'
 
 // assets
-import logo from './logo.svg';
 import StarWarsLogo from '../../assets/img/star_wars_logo.svg';
 import './App.css';
 import { commonService } from '../../_services/common.service';
@@ -21,7 +21,11 @@ class App extends Component {
 
     this.state = {
       moviesTitles: null,
-      openingCrawl: null
+      openingCrawl: null,
+      charactersUrls: null,
+      movieCharacters: null,
+      genderList: null,
+      selectedGender: null
     }
   }
 
@@ -34,7 +38,7 @@ class App extends Component {
   }
 
   fetchmoviesTitles = () => {
-    const { dispatch } = this.props;
+    // const { dispatch } = this.props;
     // dispatch(commonActions.fetchMovies())
     //   .then(() => {
     //     const { moviesTitles } = this.props;
@@ -67,31 +71,69 @@ class App extends Component {
     }
   }
 
+  handleGenderChange = (gender) => {
+    const { selectedTitle } = this.state;
+    console.log(gender.value)
+    if (gender) {
+      this.filterCharacters(gender.value);
+    } else {
+      this.fetchMovieDetails(selectedTitle)
+    }
+  }
+
+  filterCharacters = (gender) => {
+    const { characters } = this.props;
+    let filteredCharacters = characters.filter(character => character.gender === gender);
+
+    this.setState({movieCharacters: filteredCharacters})
+  }
+
   fetchMovieDetails = (url) => {
     console.log({ url })
     commonService.fetchMovieDetails(url)
       .then((response) => {
         this.setState({ openingCrawl: response.response.opening_crawl })
-        console.log(response.response.opening_crawl)
+        // console.log(response.response.opening_crawl)
+        this.fetchMovieCharacters(response.response.characters)
       }).catch((error) => {
         let errorMessage = appHelpers.interpretErrorResponse(error);
         console.log({ errorMessage })
       })
   }
 
+  fetchMovieCharacters = async (urls) => {
+    // const { dispatch } = this.props
+    try {
+      let data = await Promise.all(
+        urls.map(
+          url =>
+            fetch(url).then(
+              (response) => response.json()
+            )));
+      let genderList = appHelpers.filterGenderList(data);
+      this.setState({ movieCharacters: data, genderList: genderList })
+      // dispatch(fetchCharacters(data))
+
+    } catch (error) {
+      console.log(error)
+
+      throw (error)
+    }
+
+  }
+
 
   render() {
-    const { selectedTitle, moviesTitles, openingCrawl } = this.state;
+    const { selectedTitle, moviesTitles, openingCrawl, movieCharacters,
+      genderList, selectedGender } = this.state;
 
 
     return (
       <div className="app-background">
 
         <div className="container">
-          <MovieDropDown
+          <DropDown
             placeholder="Select a movie"
-            labelKey="title"
-            valueKey="url"
             data={moviesTitles}
             clearable={true}
             selectedValue={selectedTitle}
@@ -109,12 +151,31 @@ class App extends Component {
             </div>}
         </header>
 
-        <div className="row">
-          <div className="col-12">
-            <h3>Actors & Actresses</h3>
-            
+        <div className="container">
+          <div className="row">
+            <div className="col-8">
+              <h3 className="text-white">List of Characters</h3>
+            </div>
+            <div className="col-4">
+              <DropDown
+                placeholder="Filter by gender"
+                data={genderList}
+                clearable={true}
+                selectedValue={selectedGender}
+                onValueChange={(value) => this.handleGenderChange(value)} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-12">
+              {movieCharacters &&
+                <CharactersTable
+                  data={movieCharacters}
+                />
+              }
+            </div>
           </div>
         </div>
+
       </div>
     );
   }
@@ -122,9 +183,10 @@ class App extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { moviesTitles } = state;
+  const { moviesTitles, characters } = state;
   return {
-    moviesTitles
+    moviesTitles,
+    characters
   }
 }
 

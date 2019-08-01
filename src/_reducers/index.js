@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 import { moviesTitles } from './moviesTitles.reducer'
-
+import { characters } from './characters.reducers'
 const rootReducer = combineReducers({
-    moviesTitles
+    moviesTitles,
+    characters
 })
 
 export default rootReducer;

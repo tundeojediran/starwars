@@ -10,6 +10,37 @@ export const appHelpers = {
         let config = { headers: reqHeader };
         return axios.get(url, config)
     },
+    getMultipleRequest: function (urls) {
+
+        Promise.all(urls.map(url =>
+            fetch(url)
+                .then(this.checkStatus)
+                .then(this.parseJSON)
+                .catch(error => console.log('There was a problem!', error))
+        ));
+        // .then(data => {
+        //     console.log({data})
+        //     // const breedList = data[0].message;
+        //     // const randomImage = data[1].message;
+
+        //     // generateOptions(breedList);
+        //     // generateImage(randomImage);
+        // })
+
+    },
+
+    checkStatus: function (response) {
+        if (response.ok) {
+            return Promise.resolve(response);
+        } else {
+            return Promise.reject(new Error(response.statusText));
+        }
+    },
+
+    parseJSON: function (response) {
+        return response.json();
+    },
+
     // helper function for formatting response
     formatPromiseResponse: function (res, resType) {
         let responseType =
@@ -41,8 +72,8 @@ export const appHelpers = {
 
     // helper function for fetching an array of movies titles
     getMoviesTitles: function (movies) {
-        console.log({movies})
-        
+        console.log({ movies })
+
         let moviesTitles = movies.map((movie) => {
             return {
                 "label": movie.title,
@@ -50,5 +81,36 @@ export const appHelpers = {
             }
         })
         return moviesTitles;
+    },
+
+    calculateTotalHeight: function (data) {
+
+        let initialValue = 0;
+        let sumHeights = data.reduce(function (accumulator, currentValue) {
+            let derivedValue = (isNaN(currentValue.height)) ? 0 : Number(currentValue.height);
+            return accumulator + derivedValue;
+        }, initialValue);
+        console.log({ sumHeights })
+
+        let sumHeightsInFeet = this.convertInchesToFeetInches(sumHeights * 0.39370)
+
+        return {
+            sumHeights,
+            sumHeightsInFeet
+        }
+    },
+
+    convertInchesToFeetInches: function (inches) {
+        let feetFromInches = Math.floor(inches / 12);
+        let inchesRemainder = inches % 12;
+
+        let result = `${feetFromInches}ft/${inchesRemainder}in`;
+        console.log(result);
+        return result;
+    },
+
+    filterGenderList: function (data) {
+        let genderList = [...new Set(data.map(item => item.gender))];
+        return genderList;
     }
 }
