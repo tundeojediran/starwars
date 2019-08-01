@@ -10,7 +10,8 @@ import DropDown from '../Dropdown'
 import CharactersTable from '../Table'
 
 // assets
-import StarWarsLogo from '../../assets/img/star_wars_logo.svg';
+// import StarWarsLogo from '../../assets/img/star_wars_logo.svg';
+import StarWarsLogo from '../../assets/img/star-wars-logo.png';
 import './App.css';
 import { commonService } from '../../_services/common.service';
 
