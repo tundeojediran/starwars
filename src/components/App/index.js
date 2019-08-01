@@ -53,7 +53,6 @@ class App extends Component {
 
     commonService.fetchAllMovies()
       .then((response) => {
-        console.log(response.response.results)
         let moviesTitles = appHelpers.getMoviesTitles(response.response.results)
         this.setState({ moviesTitles: moviesTitles })
       }).catch((error) => {
@@ -63,7 +62,6 @@ class App extends Component {
   }
 
   handleTitleChange = (movie) => {
-    console.log(movie.value)
     if (movie) {
       this.fetchMovieDetails(movie.value);
     } else {
@@ -73,7 +71,6 @@ class App extends Component {
 
   handleGenderChange = (gender) => {
     const { selectedTitle } = this.state;
-    console.log(gender.value)
     if (gender) {
       this.filterCharacters(gender.value);
     } else {
@@ -89,11 +86,9 @@ class App extends Component {
   }
 
   fetchMovieDetails = (url) => {
-    console.log({ url })
     commonService.fetchMovieDetails(url)
       .then((response) => {
         this.setState({ openingCrawl: response.response.opening_crawl })
-        // console.log(response.response.opening_crawl)
         this.fetchMovieCharacters(response.response.characters)
       }).catch((error) => {
         let errorMessage = appHelpers.interpretErrorResponse(error);

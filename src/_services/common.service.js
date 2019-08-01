@@ -24,7 +24,6 @@ function fetchAllMovies() {
 function fetchMovieDetails(url) {
     return appHelpers.getRequest(url)
         .then(res => {
-            console.log({res})
             return appHelpers.formatPromiseResponse(res.data);
         }).catch(
             error => {
@@ -38,7 +37,6 @@ function fetchMovieDetails(url) {
 function fetchAllCharacters(urls) {
     return appHelpers.getMultipleRequest(urls)
         .then(res => {
-            console.log({res})
             return appHelpers.formatPromiseResponse(res.data);
         }).catch(
             error => {

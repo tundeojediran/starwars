@@ -72,8 +72,6 @@ export const appHelpers = {
 
     // helper function for fetching an array of movies titles
     getMoviesTitles: function (movies) {
-        console.log({ movies })
-
         let moviesTitles = movies.map((movie) => {
             return {
                 "label": movie.title,
@@ -90,7 +88,6 @@ export const appHelpers = {
             let derivedValue = (isNaN(currentValue.height)) ? 0 : Number(currentValue.height);
             return accumulator + derivedValue;
         }, initialValue);
-        console.log({ sumHeights })
 
         let sumHeightsInFeet = this.convertInchesToFeetInches(sumHeights * 0.39370)
 
@@ -105,7 +102,6 @@ export const appHelpers = {
         let inchesRemainder = inches % 12;
 
         let result = `${feetFromInches}ft/${inchesRemainder}in`;
-        console.log(result);
         return result;
     },
 
